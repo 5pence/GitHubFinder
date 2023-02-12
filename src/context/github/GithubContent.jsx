@@ -17,7 +17,7 @@ export const GitHubProvider = ({ children }) => {
   const fetchUsers = async () => {
     setLoading()
     const response = await fetch(`${import.meta.env.
-      VITE_GITHUB_API_URL}/users`,{
+      VITE_GITHUB_API_URL}/users`, {
       headers: {
         Authorization: `token: ${import.meta.env.VITE_GITHUB_API_TOKEN}`
       }
@@ -29,6 +29,33 @@ export const GitHubProvider = ({ children }) => {
     })
   }
 
+  const searchUser = async (handle) => {
+    setLoading()
+    const params = new URLSearchParams({
+      q: handle
+    })
+
+    const response = await fetch(`${import.meta.env.
+      VITE_GITHUB_API_URL}/search/users?${params}`, {
+        headers: {
+          Authorization: `token: ${import.meta.env.VITE_GITHUB_API_TOKEN}`
+        }
+        })
+      const { items } = await response.json()
+      dispatch({
+        type: 'SEARCH_USER',
+        payload: items
+      })
+  }
+
+  const clearResults = () => {
+    dispatch({
+      type: 'CLEAR_USERS',
+      payload: [],
+      loading: false
+    })
+  }
+
   const setLoading = () => {
     dispatch({type: "SET_LOADING"})
   }
@@ -36,7 +63,9 @@ export const GitHubProvider = ({ children }) => {
   return <GitHubContext.Provider value={{
     users: state.users,
     loading: state.loading,
-    fetchUsers
+    fetchUsers,
+    searchUser,
+    clearResults
   }}>
     {children}
   </GitHubContext.Provider>
