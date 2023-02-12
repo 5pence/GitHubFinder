@@ -9,12 +9,13 @@ const authToken = import.meta.env.VITE_GITHUB_TOKEN
 export const GitHubProvider = ({ children }) => {
   const initialState = {
     users: [],
-    loading: true
+    loading: false
   }
 
   const [state, dispatch] = useReducer(githubReducer, initialState)
 
   const fetchUsers = async () => {
+    setLoading()
     const response = await fetch(`${import.meta.env.
       VITE_GITHUB_API_URL}/users`,{
       headers: {
@@ -26,6 +27,10 @@ export const GitHubProvider = ({ children }) => {
       type: 'GET_USERS',
       payload: data
     })
+  }
+
+  const setLoading = () => {
+    dispatch({type: "SET_LOADING"})
   }
 
   return <GitHubContext.Provider value={{
