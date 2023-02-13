@@ -12,7 +12,7 @@ function UserItem({ user }) {
             </div>
           </div>
           <h2 className="card-title">{user.login}</h2>
-          <Link to={`${import.meta.env.VITE_GITHUB_URL}/${user.login}`}>Visit User</Link>
+          <Link to={`user/${user.login}`}>Visit User</Link>
         </div>
       </div>
     </div>
